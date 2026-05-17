@@ -1,0 +1,2775 @@
+<!doctype html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculus — Ch.15 & 16 To'liq Qo'llanma</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a0c10;
+        --bg2: #0f1219;
+        --bg3: #141824;
+        --border: rgba(255, 255, 255, 0.06);
+        --border2: rgba(255, 255, 255, 0.12);
+        --text: #e8eaf0;
+        --muted: #7a8090;
+        --accent1: #4f9eff;
+        --accent2: #ff6b6b;
+        --accent3: #63e2b2;
+        --accent4: #f9c74f;
+        --accent5: #b87aff;
+        --glow1: rgba(79, 158, 255, 0.15);
+        --glow2: rgba(255, 107, 107, 0.12);
+        --glow3: rgba(99, 226, 178, 0.12);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+        overflow-x: hidden;
+      }
+
+      /* ---- GRID BACKGROUND ---- */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(79, 158, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(79, 158, 255, 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ---- HERO ---- */
+      .hero {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 60px 24px;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        width: 700px;
+        height: 700px;
+        background: radial-gradient(
+          circle,
+          rgba(79, 158, 255, 0.08) 0%,
+          transparent 70%
+        );
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--border2);
+        border-radius: 100px;
+        padding: 6px 16px;
+        font-size: 12px;
+        font-family: "JetBrains Mono", monospace;
+        color: var(--accent1);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 32px;
+        background: rgba(79, 158, 255, 0.05);
+        animation: fadeUp 0.6s ease both;
+      }
+
+      .hero-badge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        background: var(--accent1);
+        border-radius: 50%;
+        animation: pulse 2s ease infinite;
+      }
+
+      .hero h1 {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(48px, 7vw, 96px);
+        font-weight: 700;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        animation: fadeUp 0.7s 0.1s ease both;
+        max-width: 900px;
+      }
+
+      .hero h1 em {
+        font-style: italic;
+        color: var(--accent1);
+      }
+
+      .hero-sub {
+        margin-top: 20px;
+        font-size: 18px;
+        color: var(--muted);
+        max-width: 540px;
+        animation: fadeUp 0.7s 0.2s ease both;
+      }
+
+      .hero-nav {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 48px;
+        animation: fadeUp 0.7s 0.3s ease both;
+      }
+
+      .hero-nav a {
+        text-decoration: none;
+        padding: 10px 22px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s;
+        border: 1px solid var(--border2);
+        color: var(--text);
+        background: var(--bg3);
+      }
+
+      .hero-nav a:hover {
+        border-color: var(--accent1);
+        color: var(--accent1);
+        background: rgba(79, 158, 255, 0.06);
+        transform: translateY(-2px);
+      }
+
+      /* ---- SECTIONS ---- */
+      .section {
+        position: relative;
+        z-index: 1;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 80px 24px;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 48px;
+      }
+
+      .section-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--accent1);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        opacity: 0.7;
+      }
+
+      .section-title {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(28px, 4vw, 44px);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .section-title span {
+        color: var(--accent1);
+      }
+
+      /* ---- CARDS ---- */
+      .card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 28px 32px;
+        margin-bottom: 20px;
+        transition:
+          border-color 0.2s,
+          transform 0.2s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+      }
+
+      .card:hover {
+        border-color: var(--border2);
+        transform: translateY(-2px);
+      }
+
+      .card.blue::before {
+        background: var(--glow1);
+      }
+      .card.red::before {
+        background: var(--glow2);
+      }
+      .card.green::before {
+        background: var(--glow3);
+      }
+      .card:hover::before {
+        opacity: 1;
+      }
+
+      .card-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .card-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      .card h3 {
+        font-family: "Playfair Display", serif;
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+
+      .card p {
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.75;
+        margin-bottom: 16px;
+      }
+
+      .card p:last-child {
+        margin-bottom: 0;
+      }
+
+      /* ---- FORMULA BLOCK ---- */
+      .formula {
+        background: var(--bg);
+        border: 1px solid var(--border2);
+        border-radius: 10px;
+        padding: 20px 24px;
+        margin: 16px 0;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 15px;
+        overflow-x: auto;
+        position: relative;
+      }
+
+      .formula .label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        margin-bottom: 8px;
+        display: block;
+      }
+
+      .formula .math {
+        color: var(--accent1);
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      /* ---- HIGHLIGHT COLORS ---- */
+      .hl-blue {
+        color: var(--accent1);
+      }
+      .hl-red {
+        color: var(--accent2);
+      }
+      .hl-green {
+        color: var(--accent3);
+      }
+      .hl-gold {
+        color: var(--accent4);
+      }
+      .hl-purple {
+        color: var(--accent5);
+      }
+
+      /* ---- EXAMPLE BLOCK ---- */
+      .example {
+        background: var(--bg3);
+        border-left: 3px solid var(--accent3);
+        border-radius: 0 10px 10px 0;
+        padding: 20px 24px;
+        margin: 20px 0;
+      }
+
+      .example-title {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent3);
+        margin-bottom: 12px;
+      }
+
+      .example h4 {
+        font-family: "Playfair Display", serif;
+        font-size: 17px;
+        margin-bottom: 10px;
+      }
+
+      /* ---- STEPS ---- */
+      .steps {
+        list-style: none;
+        counter-reset: step;
+      }
+
+      .steps li {
+        counter-increment: step;
+        padding: 14px 0 14px 48px;
+        position: relative;
+        border-bottom: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 15px;
+      }
+
+      .steps li:last-child {
+        border-bottom: none;
+      }
+
+      .steps li::before {
+        content: counter(step);
+        position: absolute;
+        left: 0;
+        top: 14px;
+        width: 28px;
+        height: 28px;
+        background: rgba(79, 158, 255, 0.1);
+        border: 1px solid rgba(79, 158, 255, 0.3);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--accent1);
+      }
+
+      .steps li strong {
+        color: var(--text);
+      }
+
+      /* ---- THEOREM GRID ---- */
+      .theorem-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+        margin-top: 32px;
+      }
+
+      .theorem-card {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 24px;
+        background: var(--bg2);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.25s;
+      }
+
+      .theorem-card::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+      }
+
+      .theorem-card.t1::after {
+        background: var(--accent1);
+      }
+      .theorem-card.t2::after {
+        background: var(--accent3);
+      }
+      .theorem-card.t3::after {
+        background: var(--accent4);
+      }
+      .theorem-card.t4::after {
+        background: var(--accent2);
+      }
+      .theorem-card.t5::after {
+        background: var(--accent5);
+      }
+
+      .theorem-card:hover {
+        transform: translateY(-3px);
+        border-color: var(--border2);
+      }
+
+      .theorem-card .tc-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+
+      .theorem-card h4 {
+        font-family: "Playfair Display", serif;
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+
+      .theorem-card .tc-formula {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--accent1);
+        background: var(--bg);
+        border-radius: 8px;
+        padding: 10px 14px;
+        margin: 12px 0;
+        line-height: 1.7;
+      }
+
+      .theorem-card p {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      /* ---- DIVIDER ---- */
+      .divider {
+        border: none;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--border2),
+          transparent
+        );
+        margin: 0 24px;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* ---- COORDINATE TABLE ---- */
+      .coord-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        margin: 16px 0;
+      }
+
+      .coord-table th {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        padding: 10px 16px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .coord-table td {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        color: var(--text);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+      }
+
+      .coord-table tr:last-child td {
+        border-bottom: none;
+      }
+      .coord-table tr:hover td {
+        background: var(--bg3);
+      }
+
+      /* ---- QUIZ ---- */
+      .quiz-wrap {
+        margin-top: 32px;
+      }
+
+      .quiz-q {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 16px;
+        transition: border-color 0.2s;
+      }
+
+      .quiz-q:hover {
+        border-color: var(--border2);
+      }
+
+      .quiz-q .q-text {
+        font-family: "Playfair Display", serif;
+        font-size: 16px;
+        margin-bottom: 16px;
+      }
+
+      .quiz-options {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .quiz-opt {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 14px;
+        color: var(--muted);
+        background: var(--bg3);
+        user-select: none;
+      }
+
+      .quiz-opt:hover {
+        border-color: var(--border2);
+        color: var(--text);
+      }
+
+      .quiz-opt.correct {
+        border-color: var(--accent3);
+        color: var(--accent3);
+        background: rgba(99, 226, 178, 0.06);
+      }
+      .quiz-opt.wrong {
+        border-color: var(--accent2);
+        color: var(--accent2);
+        background: rgba(255, 107, 107, 0.06);
+      }
+
+      .quiz-opt .opt-key {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        border: 1px solid currentColor;
+        flex-shrink: 0;
+      }
+
+      .quiz-explain {
+        display: none;
+        margin-top: 12px;
+        padding: 12px 16px;
+        background: rgba(99, 226, 178, 0.05);
+        border: 1px solid rgba(99, 226, 178, 0.2);
+        border-radius: 8px;
+        font-size: 14px;
+        color: var(--accent3);
+        line-height: 1.6;
+      }
+
+      .quiz-explain.show {
+        display: block;
+      }
+
+      /* ---- SVG DIAGRAMS ---- */
+      .diagram-wrap {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 24px;
+        margin: 20px 0;
+        overflow: hidden;
+      }
+
+      .diagram-wrap svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      /* ---- PROGRESS BAR ---- */
+      .progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--accent1), var(--accent3));
+        z-index: 9999;
+        transition: width 0.1s;
+        width: 0%;
+      }
+
+      /* ---- NAV DOTS ---- */
+      .nav-dots {
+        position: fixed;
+        right: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 100;
+      }
+
+      .nav-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--border2);
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+      }
+
+      .nav-dot:hover,
+      .nav-dot.active {
+        background: var(--accent1);
+        transform: scale(1.5);
+      }
+
+      /* ---- ANIMATIONS ---- */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+
+      .reveal.visible {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* ---- FOOTER ---- */
+      .footer {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        padding: 60px 24px;
+        color: var(--muted);
+        font-size: 13px;
+        border-top: 1px solid var(--border);
+      }
+
+      /* ---- UTILITY ---- */
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      @media (max-width: 640px) {
+        .grid2 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .tag {
+        display: inline-block;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 3px 10px;
+        border-radius: 100px;
+        margin-right: 6px;
+        margin-bottom: 4px;
+      }
+
+      .tag.blue {
+        background: rgba(79, 158, 255, 0.12);
+        color: var(--accent1);
+      }
+      .tag.green {
+        background: rgba(99, 226, 178, 0.12);
+        color: var(--accent3);
+      }
+      .tag.red {
+        background: rgba(255, 107, 107, 0.12);
+        color: var(--accent2);
+      }
+      .tag.gold {
+        background: rgba(249, 199, 79, 0.12);
+        color: var(--accent4);
+      }
+      .tag.purple {
+        background: rgba(184, 122, 255, 0.12);
+        color: var(--accent5);
+      }
+
+      .sep {
+        width: 48px;
+        height: 2px;
+        background: var(--accent1);
+        border-radius: 2px;
+        margin: 16px 0;
+      }
+
+      /* ---- INTERACTIVE SVG DIAGRAM COLORS ---- */
+      .arr-blue {
+        stroke: var(--accent1);
+      }
+      .arr-red {
+        stroke: var(--accent2);
+      }
+      .arr-green {
+        stroke: var(--accent3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress-bar" id="progress"></div>
+
+    <nav class="nav-dots" id="navDots">
+      <a class="nav-dot" href="#hero" title="Kirish"></a>
+      <a class="nav-dot" href="#line" title="Line Integrals"></a>
+      <a class="nav-dot" href="#surface" title="Surface Integrals"></a>
+      <a class="nav-dot" href="#triple" title="Triple Integrals"></a>
+      <a class="nav-dot" href="#theorems" title="Teoremalar"></a>
+      <a class="nav-dot" href="#quiz" title="Test"></a>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero" id="hero">
+      <div class="hero-badge">Stewart Calculus · 7th Ed · Ch.15–16</div>
+      <h1>Ko'p o'lchovli<br /><em>Integrallar</em></h1>
+      <p class="hero-sub">
+        Line, Surface va Triple integrallar — nazariya, formulalar va misollar
+        bilan to'liq qo'llanma
+      </p>
+      <nav class="hero-nav">
+        <a href="#line">Chiziq integrali</a>
+        <a href="#surface">Yuza integrali</a>
+        <a href="#triple">Uch o'lchovli</a>
+        <a href="#theorems">4 Buyuk Teorema</a>
+        <a href="#quiz">Test</a>
+      </nav>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ==================== LINE INTEGRALS ==================== -->
+    <section class="section" id="line">
+      <div class="section-header">
+        <div>
+          <div class="section-num">01 / Chiziq Integrali</div>
+          <h2 class="section-title">Line <span>Integrals</span></h2>
+        </div>
+      </div>
+
+      <!-- Nazariya -->
+      <div class="card blue reveal">
+        <div class="card-label hl-blue">Nazariya</div>
+        <h3>Chiziq integrali nima?</h3>
+        <p>
+          Chiziq integrali — bu <strong>egri chiziq bo'ylab</strong> hisoblangan
+          integral. Oddiy integraldan farqi shuki, biz to'g'ri chiziq bo'yicha
+          emas, balki ixtiyoriy egri chiziq <em>C</em> bo'yicha
+          integrallashtiramiz.
+        </p>
+        <p>
+          Fizikada: zaryadlangan zarraga kuch maydoni orqali ish hisoblash,
+          massali sim og'irlik markazi — bular chiziq integrali.
+        </p>
+        <div class="sep"></div>
+
+        <div class="formula">
+          <span class="label"
+            >Arc length bo'yicha (yo'nalishga bog'liq EMAS)</span
+          >
+          <div class="math">∫_C f(x,y) ds</div>
+        </div>
+        <div class="formula">
+          <span class="label"
+            >Vektor maydon bo'yicha (yo'nalishga BOG'LIQ)</span
+          >
+          <div class="math">∫_C F·dr = ∫_C P dx + Q dy + R dz</div>
+        </div>
+        <div class="formula">
+          <span class="label"
+            >Parametrik holda hisoblash (r(t) = ⟨x(t), y(t)⟩)</span
+          >
+          <div class="math">∫_C F·dr = ∫_a^b F(r(t)) · r'(t) dt</div>
+        </div>
+        <div class="formula">
+          <span class="label">Arc length elementi</span>
+          <div class="math">ds = √(x'(t)² + y'(t)²) dt</div>
+        </div>
+      </div>
+
+      <!-- SVG diagramma -->
+      <div class="diagram-wrap reveal">
+        <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker
+              id="arr"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto-start-reverse"
+            >
+              <path
+                d="M2 1L8 5L2 9"
+                fill="none"
+                stroke="context-stroke"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </marker>
+          </defs>
+          <!-- Axes -->
+          <line
+            x1="50"
+            y1="240"
+            x2="650"
+            y2="240"
+            stroke="rgba(255,255,255,0.15)"
+            stroke-width="1"
+            marker-end="url(#arr)"
+          />
+          <line
+            x1="50"
+            y1="240"
+            x2="50"
+            y2="20"
+            stroke="rgba(255,255,255,0.15)"
+            stroke-width="1"
+            marker-end="url(#arr)"
+          />
+          <text
+            x="655"
+            y="244"
+            fill="rgba(255,255,255,0.4)"
+            font-family="JetBrains Mono"
+            font-size="12"
+          >
+            x
+          </text>
+          <text
+            x="38"
+            y="16"
+            fill="rgba(255,255,255,0.4)"
+            font-family="JetBrains Mono"
+            font-size="12"
+          >
+            y
+          </text>
+
+          <!-- Curve C -->
+          <path
+            d="M100,210 C160,140 260,80 430,60 C520,50 570,90 600,130"
+            fill="none"
+            stroke="#4f9eff"
+            stroke-width="2.5"
+          />
+
+          <!-- Vector field arrows -->
+          <g stroke="#63e2b2" stroke-width="1.5" opacity="0.6">
+            <line x1="150" y1="180" x2="170" y2="155" marker-end="url(#arr)" />
+            <line x1="230" y1="140" x2="250" y2="115" marker-end="url(#arr)" />
+            <line x1="310" y1="100" x2="330" y2="75" marker-end="url(#arr)" />
+            <line x1="400" y1="72" x2="420" y2="47" marker-end="url(#arr)" />
+            <line x1="500" y1="82" x2="520" y2="57" marker-end="url(#arr)" />
+            <line x1="560" y1="108" x2="580" y2="83" marker-end="url(#arr)" />
+          </g>
+
+          <!-- dr element -->
+          <path
+            d="M340,88 C360,80 380,73 400,70"
+            fill="none"
+            stroke="#ff6b6b"
+            stroke-width="3"
+          />
+          <line
+            x1="340"
+            y1="88"
+            x2="400"
+            y2="70"
+            stroke="#ff6b6b"
+            stroke-width="1.5"
+            stroke-dasharray="4,3"
+            marker-end="url(#arr)"
+          />
+
+          <!-- Points A and B -->
+          <circle cx="100" cy="210" r="6" fill="#4f9eff" />
+          <text
+            x="85"
+            y="232"
+            fill="#4f9eff"
+            font-family="Playfair Display"
+            font-size="16"
+            font-style="italic"
+          >
+            A
+          </text>
+          <circle cx="600" cy="130" r="6" fill="#4f9eff" />
+          <text
+            x="610"
+            y="128"
+            fill="#4f9eff"
+            font-family="Playfair Display"
+            font-size="16"
+            font-style="italic"
+          >
+            B
+          </text>
+
+          <!-- Labels -->
+          <text
+            x="260"
+            y="190"
+            fill="#4f9eff"
+            font-family="Playfair Display"
+            font-size="18"
+            font-style="italic"
+          >
+            C
+          </text>
+          <text
+            x="350"
+            y="58"
+            fill="#ff6b6b"
+            font-family="JetBrains Mono"
+            font-size="12"
+          >
+            dr
+          </text>
+          <text
+            x="395"
+            y="40"
+            fill="#63e2b2"
+            font-family="JetBrains Mono"
+            font-size="12"
+          >
+            F(x,y)
+          </text>
+
+          <!-- Legend -->
+          <line
+            x1="50"
+            y1="258"
+            x2="80"
+            y2="258"
+            stroke="#4f9eff"
+            stroke-width="2.5"
+          />
+          <text
+            x="85"
+            y="262"
+            fill="rgba(255,255,255,0.5)"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            Egri chiziq C
+          </text>
+          <line
+            x1="200"
+            y1="258"
+            x2="230"
+            y2="258"
+            stroke="#63e2b2"
+            stroke-width="1.5"
+          />
+          <text
+            x="235"
+            y="262"
+            fill="rgba(255,255,255,0.5)"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            Vektor maydon F
+          </text>
+          <line
+            x1="370"
+            y1="258"
+            x2="400"
+            y2="258"
+            stroke="#ff6b6b"
+            stroke-width="2.5"
+          />
+          <text
+            x="405"
+            y="262"
+            fill="rgba(255,255,255,0.5)"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            Element dr
+          </text>
+        </svg>
+      </div>
+
+      <!-- MISOL 1: Oddiy -->
+      <div class="example reveal">
+        <div class="example-title">▶ Misol 1 — Sodda chiziq integrali</div>
+        <h4>∫_C (x+y) ds, bu yerda C: x²+y²=1 ning birinchi chorak qismi</h4>
+        <p style="color: var(--muted); font-size: 14px; margin: 10px 0">
+          C ni parametrik: x=cos t, y=sin t, 0≤t≤π/2
+        </p>
+        <ol class="steps" style="margin-top: 12px">
+          <li>
+            <strong>ds topamiz:</strong> ds = √(x'²+y'²) dt = √(sin²t + cos²t)
+            dt = <span class="hl-green">dt</span>
+          </li>
+          <li>
+            <strong>Integrandni almashtirish:</strong> x+y = cos t + sin t
+          </li>
+          <li>
+            <strong>Hisoblash:</strong> ∫₀^{π/2} (cos t + sin t) dt = [sin t −
+            cos t]₀^{π/2}
+          </li>
+          <li>
+            <strong>Javob:</strong> = (1−0) − (0−1) =
+            <span class="hl-green">2</span>
+          </li>
+        </ol>
+      </div>
+
+      <!-- MISOL 2: Konservativ maydon (Exam masalasi) -->
+      <div class="example reveal">
+        <div class="example-title">▶ Misol 2 — Exam masalasi (Part II)</div>
+        <h4>F = ⟨2xy+z², x²+2yz, 2xz+y²⟩, A=(0,0,0) → B=(1,2,3)</h4>
+        <ol class="steps">
+          <li>
+            <strong>curl F = 0 ni tekshirish:</strong>
+            <div class="formula" style="margin-top: 8px">
+              <div class="math" style="font-size: 13px">
+                i: ∂(2xz+y²)/∂y − ∂(x²+2yz)/∂z = 2y − 2y = 0 ✓<br />
+                j: ∂(2xy+z²)/∂z − ∂(2xz+y²)/∂x = 2z − 2z = 0 ✓<br />
+                k: ∂(x²+2yz)/∂x − ∂(2xy+z²)/∂y = 2x − 2x = 0 ✓
+              </div>
+            </div>
+          </li>
+          <li>
+            <strong>Potensial funksiya f topish:</strong>
+            <div class="formula" style="margin-top: 8px">
+              <div class="math" style="font-size: 13px">
+                fx = 2xy+z² → f = x²y + xz² + g(y,z)<br />
+                fy = x² + gz = x²+2yz → gz = 2yz → g = y²z + h(z)<br />
+                fz = 2xz + y² ✓<br />
+                ∴ f(x,y,z) = x²y + xz² + y²z
+              </div>
+            </div>
+          </li>
+          <li>
+            <strong>FT for Line Integrals:</strong>
+            <div class="formula" style="margin-top: 8px">
+              <div class="math">
+                ∫_C F·dr = f(B) − f(A)<br />
+                f(1,2,3) = 1·2 + 1·9 + 4·3 = 2+9+12 =
+                <span style="color: var(--accent3)">23</span><br />
+                f(0,0,0) = 0<br />
+                Javob: <span style="color: var(--accent3)">23</span>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Konservativ maydon qoidalari -->
+      <div class="card reveal">
+        <div class="card-label hl-gold">Muhim qoidalar</div>
+        <h3>Konservativ maydon belgilari</h3>
+        <div class="grid2" style="margin-top: 16px">
+          <div>
+            <p>
+              <span class="hl-gold">✓ 2D da:</span> F = ⟨P,Q⟩ konservativ ⟺
+              ∂P/∂y = ∂Q/∂x
+            </p>
+            <p>
+              <span class="hl-gold">✓ 3D da:</span> F = ⟨P,Q,R⟩ konservativ ⟺
+              curl F = <b>0</b>
+            </p>
+          </div>
+          <div>
+            <p>
+              <span class="hl-green">Natija 1:</span> ∫_C F·dr = f(B) − f(A) —
+              faqat uchki nuqtalarga bog'liq
+            </p>
+            <p>
+              <span class="hl-green">Natija 2:</span> Har qanday yopiq C uchun
+              ∮_C F·dr = 0
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ==================== SURFACE INTEGRALS ==================== -->
+    <section class="section" id="surface">
+      <div class="section-header">
+        <div>
+          <div class="section-num">02 / Yuza Integrali</div>
+          <h2 class="section-title">Surface <span>Integrals</span></h2>
+        </div>
+      </div>
+
+      <div class="card red reveal">
+        <div class="card-label hl-red">Nazariya</div>
+        <h3>Yuzaviy integral nima?</h3>
+        <p>
+          Yuzaviy integral — bu
+          <strong>ikki o'lchovli yuza orqali o'tadigan oqimni</strong> (flux)
+          hisoblaydi. Fizikada: elektr maydon oqimi, suyuqlik oqimi, issiqlik
+          oqimi.
+        </p>
+        <p>
+          Ikki turi bor: <em>skalyar yuzaviy integral</em> (massa, yuza maydoni)
+          va <em>vektorial yuzaviy integral</em> (flux).
+        </p>
+        <div class="sep" style="background: var(--accent2)"></div>
+        <div class="formula">
+          <span class="label">Skalyar yuza integrali (z = f(x,y) bo'lsa)</span>
+          <div class="math">∬_S g dS = ∬_D g(x,y,f) √(1 + fx² + fy²) dA</div>
+        </div>
+        <div class="formula">
+          <span class="label"
+            >Flux (vektor maydon, yuqoriga yo'nalgan normal)</span
+          >
+          <div class="math">∬_S F·dS = ∬_D F · ⟨−fx, −fy, 1⟩ dA</div>
+        </div>
+        <div class="formula">
+          <span class="label">Yopiq yuza uchun (Divergence Theorem)</span>
+          <div class="math">∯_S F·dS = ∭_E div F dV</div>
+        </div>
+      </div>
+
+      <!-- SVG: Paraboloid + Disk -->
+      <div class="diagram-wrap reveal">
+        <svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker
+              id="arr2"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="5"
+              markerHeight="5"
+              orient="auto-start-reverse"
+            >
+              <path
+                d="M2 1L8 5L2 9"
+                fill="none"
+                stroke="context-stroke"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </marker>
+          </defs>
+
+          <!-- Background region E -->
+          <path
+            d="M200,275 Q220,160 350,55 Q480,160 500,275 Z"
+            fill="rgba(79,158,255,0.06)"
+            stroke="none"
+          />
+
+          <!-- S1: Paraboloid -->
+          <path
+            d="M200,275 C230,170 280,100 350,55 C420,100 470,170 500,275"
+            fill="none"
+            stroke="#4f9eff"
+            stroke-width="2.5"
+          />
+
+          <!-- S2: Disk ellipse -->
+          <ellipse
+            cx="350"
+            cy="275"
+            rx="150"
+            ry="20"
+            fill="rgba(255,107,107,0.08)"
+            stroke="#ff6b6b"
+            stroke-width="2"
+          />
+
+          <!-- z-axis -->
+          <line
+            x1="90"
+            y1="295"
+            x2="90"
+            y2="30"
+            stroke="rgba(255,255,255,0.2)"
+            stroke-width="1"
+            marker-end="url(#arr2)"
+          />
+          <text
+            x="78"
+            y="22"
+            fill="rgba(255,255,255,0.4)"
+            font-family="JetBrains Mono"
+            font-size="12"
+          >
+            z
+          </text>
+          <text
+            x="76"
+            y="280"
+            fill="rgba(255,255,255,0.3)"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            0
+          </text>
+          <text
+            x="76"
+            y="62"
+            fill="rgba(255,255,255,0.3)"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            4
+          </text>
+
+          <!-- Outward normals on paraboloid -->
+          <g stroke="#4f9eff" stroke-width="1.5" opacity="0.8">
+            <line x1="240" y1="220" x2="215" y2="188" marker-end="url(#arr2)" />
+            <line x1="280" y1="138" x2="255" y2="106" marker-end="url(#arr2)" />
+            <line x1="350" y1="67" x2="350" y2="32" marker-end="url(#arr2)" />
+            <line x1="420" y1="138" x2="445" y2="106" marker-end="url(#arr2)" />
+            <line x1="460" y1="220" x2="485" y2="188" marker-end="url(#arr2)" />
+          </g>
+          <g
+            fill="#4f9eff"
+            font-family="JetBrains Mono"
+            font-size="11"
+            opacity="0.7"
+          >
+            <text x="199" y="184">n</text>
+            <text x="238" y="102">n</text>
+            <text x="356" y="26">n</text>
+            <text x="448" y="102">n</text>
+            <text x="488" y="184">n</text>
+          </g>
+
+          <!-- Downward normals on disk -->
+          <g stroke="#ff6b6b" stroke-width="1.5" opacity="0.8">
+            <line x1="270" y1="278" x2="270" y2="308" marker-end="url(#arr2)" />
+            <line x1="350" y1="280" x2="350" y2="310" marker-end="url(#arr2)" />
+            <line x1="430" y1="278" x2="430" y2="308" marker-end="url(#arr2)" />
+          </g>
+          <g
+            fill="#ff6b6b"
+            font-family="JetBrains Mono"
+            font-size="10"
+            opacity="0.7"
+          >
+            <text x="256" y="318">−n</text>
+            <text x="336" y="320">−n</text>
+            <text x="416" y="318">−n</text>
+          </g>
+
+          <!-- Labels -->
+          <text
+            x="155"
+            y="170"
+            fill="#4f9eff"
+            font-family="Playfair Display"
+            font-size="20"
+            font-style="italic"
+          >
+            S₁
+          </text>
+          <text
+            x="118"
+            y="187"
+            fill="rgba(79,158,255,0.6)"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            z=4−x²−y²
+          </text>
+          <text
+            x="155"
+            y="268"
+            fill="#ff6b6b"
+            font-family="Playfair Display"
+            font-size="20"
+            font-style="italic"
+          >
+            S₂
+          </text>
+          <text
+            x="120"
+            y="283"
+            fill="rgba(255,107,107,0.6)"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            Disk, z=0
+          </text>
+
+          <!-- E label -->
+          <text
+            x="350"
+            y="180"
+            fill="rgba(79,158,255,0.4)"
+            font-family="Playfair Display"
+            font-size="22"
+            font-style="italic"
+            text-anchor="middle"
+          >
+            E
+          </text>
+
+          <!-- Right side: formula summary -->
+          <rect
+            x="540"
+            y="50"
+            width="148"
+            height="90"
+            rx="10"
+            fill="rgba(15,18,25,0.9)"
+            stroke="rgba(255,255,255,0.08)"
+            stroke-width="1"
+          />
+          <text
+            x="614"
+            y="74"
+            fill="rgba(255,255,255,0.5)"
+            font-family="JetBrains Mono"
+            font-size="10"
+            text-anchor="middle"
+          >
+            DIV THEOREM
+          </text>
+          <text
+            x="614"
+            y="94"
+            fill="#4f9eff"
+            font-family="JetBrains Mono"
+            font-size="12"
+            text-anchor="middle"
+          >
+            div F = 3
+          </text>
+          <text
+            x="614"
+            y="110"
+            fill="rgba(255,255,255,0.5)"
+            font-family="JetBrains Mono"
+            font-size="11"
+            text-anchor="middle"
+          >
+            ∯F·dS = 3·V(E)
+          </text>
+          <text
+            x="614"
+            y="128"
+            fill="#63e2b2"
+            font-family="JetBrains Mono"
+            font-size="12"
+            text-anchor="middle"
+          >
+            = 24π
+          </text>
+
+          <rect
+            x="540"
+            y="160"
+            width="148"
+            height="100"
+            rx="10"
+            fill="rgba(15,18,25,0.9)"
+            stroke="rgba(255,255,255,0.08)"
+            stroke-width="1"
+          />
+          <text
+            x="614"
+            y="182"
+            fill="rgba(255,255,255,0.5)"
+            font-family="JetBrains Mono"
+            font-size="10"
+            text-anchor="middle"
+          >
+            SILINDR KOORD.
+          </text>
+          <text
+            x="614"
+            y="200"
+            fill="#4f9eff"
+            font-family="JetBrains Mono"
+            font-size="11"
+            text-anchor="middle"
+          >
+            0≤r≤2
+          </text>
+          <text
+            x="614"
+            y="216"
+            fill="#4f9eff"
+            font-family="JetBrains Mono"
+            font-size="11"
+            text-anchor="middle"
+          >
+            0≤θ≤2π
+          </text>
+          <text
+            x="614"
+            y="232"
+            fill="#4f9eff"
+            font-family="JetBrains Mono"
+            font-size="11"
+            text-anchor="middle"
+          >
+            0≤z≤4−r²
+          </text>
+          <text
+            x="614"
+            y="250"
+            fill="rgba(255,255,255,0.4)"
+            font-family="JetBrains Mono"
+            font-size="11"
+            text-anchor="middle"
+          >
+            dV = r dr dθ dz
+          </text>
+        </svg>
+      </div>
+
+      <!-- Misol 1: Surface area -->
+      <div class="example reveal">
+        <div class="example-title">▶ Misol 1 — Yuza maydoni</div>
+        <h4>z = √(x²+y²), x²+y²≤4 yuza maydonini toping</h4>
+        <ol class="steps">
+          <li>
+            <strong>fx va fy topamiz:</strong> fx = x/√(x²+y²), fy = y/√(x²+y²)
+          </li>
+          <li>
+            <strong>√(1+fx²+fy²):</strong> = √(1 + x²/(x²+y²) + y²/(x²+y²)) = √2
+          </li>
+          <li>
+            <strong>Polar koordinat:</strong> A = ∬_D √2 dA = √2 · π·4 =
+            <span class="hl-green">4π√2</span>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Misol 2: Divergence Theorem (Exam) -->
+      <div class="example reveal">
+        <div class="example-title">
+          ▶ Misol 2 — Exam masalasi (Part III): Divergence Theorem
+        </div>
+        <h4>F = (x, y, z), S = paraboloid + disk, tashqi flux toping</h4>
+        <ol class="steps">
+          <li>
+            <strong>div F:</strong> ∂x/∂x + ∂y/∂y + ∂z/∂z = 1+1+1 =
+            <span class="hl-blue">3</span>
+          </li>
+          <li>
+            <strong>Div Theorem qo'llaymiz:</strong> ∯F·dS = ∭_E 3 dV = 3·V(E)
+          </li>
+          <li>
+            <strong>Silindr koordinatada V(E) hisoblash:</strong>
+            <div class="formula" style="margin-top: 8px">
+              <div class="math" style="font-size: 13px">
+                V = ∫₀^{2π} ∫₀^2 ∫₀^{4−r²} r dz dr dθ<br />
+                = 2π ∫₀^2 r(4−r²) dr<br />
+                = 2π [2r² − r⁴/4]₀^2<br />
+                = 2π (8 − 4) = 8π
+              </div>
+            </div>
+          </li>
+          <li>
+            <strong>Flux = 3 · 8π = <span class="hl-green">24π</span></strong>
+          </li>
+          <li>
+            <strong>Tekshirish:</strong> S₁ fluxsi = 24π, S₂ fluxsi = 0 (chunki
+            z=0 → F·n=0). Jami: 24π ✓
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ==================== TRIPLE INTEGRALS ==================== -->
+    <section class="section" id="triple">
+      <div class="section-header">
+        <div>
+          <div class="section-num">03 / Uch O'lchovli Integral</div>
+          <h2 class="section-title">Triple <span>Integrals</span></h2>
+        </div>
+      </div>
+
+      <!-- Koordinat sistemalari -->
+      <div class="card reveal">
+        <div class="card-label hl-purple">Koordinat Sistemalari</div>
+        <h3>Qaysi koordinatani tanlash kerak?</h3>
+        <table class="coord-table" style="margin-top: 16px">
+          <thead>
+            <tr>
+              <th>Sistema</th>
+              <th>Formulalar</th>
+              <th>dV</th>
+              <th>Qachon ishlatish</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color: var(--accent1)">Kartezian</td>
+              <td>x, y, z</td>
+              <td>dx dy dz</td>
+              <td>To'g'ri to'rtburchak soha</td>
+            </tr>
+            <tr>
+              <td style="color: var(--accent3)">Silindrli</td>
+              <td>x=r cosθ, y=r sinθ, z=z</td>
+              <td>r dr dθ dz</td>
+              <td>Silindrik simmetriya, konus</td>
+            </tr>
+            <tr>
+              <td style="color: var(--accent4)">Sferik</td>
+              <td>x=ρsinφcosθ, y=ρsinφsinθ, z=ρcosφ</td>
+              <td>ρ² sinφ dρ dφ dθ</td>
+              <td>Sfera, yarim sharlar</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SVG: Sferik koordinatalar -->
+      <div class="diagram-wrap reveal">
+        <svg viewBox="0 0 700 340" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker
+              id="arr3"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="5"
+              markerHeight="5"
+              orient="auto-start-reverse"
+            >
+              <path
+                d="M2 1L8 5L2 9"
+                fill="none"
+                stroke="context-stroke"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </marker>
+          </defs>
+
+          <!-- === LEFT: Region E === -->
+          <!-- Sphere upper half -->
+          <path
+            d="M130,290 A165,165 0 0,1 460,290"
+            fill="rgba(79,158,255,0.05)"
+            stroke="#4f9eff"
+            stroke-width="2"
+          />
+          <!-- Cone region fill -->
+          <path
+            d="M186,194 A165,165 0 0,1 404,194 L295,290 Z"
+            fill="rgba(184,122,255,0.15)"
+            stroke="none"
+          />
+          <!-- Cone lines -->
+          <line
+            x1="295"
+            y1="290"
+            x2="186"
+            y2="183"
+            stroke="#f9c74f"
+            stroke-width="2"
+          />
+          <line
+            x1="295"
+            y1="290"
+            x2="404"
+            y2="183"
+            stroke="#f9c74f"
+            stroke-width="2"
+          />
+
+          <!-- Axes -->
+          <line
+            x1="295"
+            y1="310"
+            x2="295"
+            y2="70"
+            stroke="rgba(255,255,255,0.2)"
+            stroke-width="1"
+            marker-end="url(#arr3)"
+          />
+          <line
+            x1="120"
+            y1="290"
+            x2="490"
+            y2="290"
+            stroke="rgba(255,255,255,0.2)"
+            stroke-width="1"
+            marker-end="url(#arr3)"
+          />
+          <text
+            x="496"
+            y="294"
+            fill="rgba(255,255,255,0.3)"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            r
+          </text>
+          <text
+            x="283"
+            y="62"
+            fill="rgba(255,255,255,0.3)"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            z
+          </text>
+
+          <!-- ρ vector -->
+          <line
+            x1="295"
+            y1="290"
+            x2="382"
+            y2="148"
+            stroke="#63e2b2"
+            stroke-width="2"
+            marker-end="url(#arr3)"
+          />
+          <text
+            x="358"
+            y="210"
+            fill="#63e2b2"
+            font-family="Playfair Display"
+            font-size="18"
+            font-style="italic"
+          >
+            ρ
+          </text>
+
+          <!-- φ angle arc -->
+          <path
+            d="M295,262 A28,28 0 0,1 315,270"
+            fill="none"
+            stroke="#ff6b6b"
+            stroke-width="1.5"
+          />
+          <text
+            x="312"
+            y="255"
+            fill="#ff6b6b"
+            font-family="JetBrains Mono"
+            font-size="13"
+          >
+            φ
+          </text>
+
+          <!-- Labels -->
+          <text
+            x="295"
+            y="125"
+            text-anchor="middle"
+            fill="rgba(79,158,255,0.7)"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            ρ = 2
+          </text>
+          <text
+            x="138"
+            y="222"
+            fill="#f9c74f"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            z=√(x²+y²)
+          </text>
+          <text
+            x="295"
+            y="246"
+            text-anchor="middle"
+            fill="rgba(184,122,255,0.8)"
+            font-family="Playfair Display"
+            font-size="20"
+            font-style="italic"
+          >
+            E
+          </text>
+          <text
+            x="432"
+            y="166"
+            fill="#ff6b6b"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            φ₀=π/4
+          </text>
+
+          <!-- φ0 derivation -->
+          <rect
+            x="508"
+            y="42"
+            width="178"
+            height="130"
+            rx="10"
+            fill="rgba(15,18,25,0.95)"
+            stroke="rgba(255,255,255,0.08)"
+            stroke-width="1"
+          />
+          <text
+            x="597"
+            y="64"
+            text-anchor="middle"
+            fill="rgba(255,255,255,0.5)"
+            font-family="JetBrains Mono"
+            font-size="10"
+          >
+            φ₀ TOPISH
+          </text>
+          <text
+            x="520"
+            y="84"
+            fill="rgba(255,255,255,0.6)"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            Konusda: z = r
+          </text>
+          <text
+            x="520"
+            y="100"
+            fill="#4f9eff"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            ρcosφ = ρsinφ
+          </text>
+          <text
+            x="520"
+            y="116"
+            fill="#4f9eff"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            tanφ = 1
+          </text>
+          <text
+            x="520"
+            y="134"
+            fill="#63e2b2"
+            font-family="JetBrains Mono"
+            font-size="12"
+          >
+            φ₀ = π/4 ✓
+          </text>
+          <text
+            x="520"
+            y="156"
+            fill="rgba(255,255,255,0.4)"
+            font-family="JetBrains Mono"
+            font-size="11"
+          >
+            Chegaralar:
+          </text>
+          <text
+            x="520"
+            y="172"
+            fill="#f9c74f"
+            font-family="JetBrains Mono"
+            font-size="10"
+          >
+            0≤θ≤2π, 0≤φ≤π/4
+          </text>
+
+          <!-- dV formula -->
+          <rect
+            x="508"
+            y="188"
+            width="178"
+            height="80"
+            rx="10"
+            fill="rgba(15,18,25,0.95)"
+            stroke="rgba(255,255,255,0.08)"
+            stroke-width="1"
+          />
+          <text
+            x="597"
+            y="210"
+            text-anchor="middle"
+            fill="rgba(255,255,255,0.5)"
+            font-family="JetBrains Mono"
+            font-size="10"
+          >
+            HAJM ELEMENTI
+          </text>
+          <text
+            x="520"
+            y="230"
+            fill="#b87aff"
+            font-family="JetBrains Mono"
+            font-size="12"
+          >
+            dV = ρ² sinφ
+          </text>
+          <text
+            x="520"
+            y="248"
+            fill="#b87aff"
+            font-family="JetBrains Mono"
+            font-size="12"
+          >
+            · dρ dφ dθ
+          </text>
+
+          <!-- Region labels -->
+          <text
+            x="297"
+            y="306"
+            text-anchor="middle"
+            fill="rgba(255,255,255,0.2)"
+            font-family="JetBrains Mono"
+            font-size="10"
+          >
+            z = 0
+          </text>
+        </svg>
+      </div>
+
+      <!-- Misol 1: Volume -->
+      <div class="example reveal">
+        <div class="example-title">
+          ▶ Misol 1 — Exam masalasi (Part IV-b): Hajm
+        </div>
+        <h4>E = sfera ρ=2 va konus z=√(x²+y²) orasidagi soha hajmi</h4>
+        <ol class="steps">
+          <li><strong>Chegaralar:</strong> 0≤θ≤2π, 0≤φ≤π/4, 0≤ρ≤2</li>
+          <li>
+            <strong>Integral yozish:</strong>
+            <div class="formula" style="margin-top: 8px">
+              <div class="math" style="font-size: 13px">
+                V = ∫₀^{2π} ∫₀^{π/4} ∫₀^2 ρ² sinφ dρ dφ dθ
+              </div>
+            </div>
+          </li>
+          <li>
+            <strong>ρ bo'yicha:</strong> ∫₀^2 ρ² dρ = [ρ³/3]₀^2 =
+            <span class="hl-blue">8/3</span>
+          </li>
+          <li>
+            <strong>φ bo'yicha:</strong> ∫₀^{π/4} sinφ dφ = [−cosφ]₀^{π/4} = 1 −
+            √2/2 = <span class="hl-blue">(2−√2)/2</span>
+          </li>
+          <li>
+            <strong>θ bo'yicha:</strong> ∫₀^{2π} dθ =
+            <span class="hl-blue">2π</span>
+          </li>
+          <li>
+            <strong>Jami:</strong> V = (8/3) · (2−√2)/2 · 2π =
+            <span class="hl-green">8π(2−√2)/3</span>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Misol 2: z dV va sentroid -->
+      <div class="example reveal">
+        <div class="example-title">
+          ▶ Misol 2 — Exam masalasi (Part IV-c,d): Sentroid
+        </div>
+        <h4>∭_E z dV va z̄ (sentroid) hisoblash</h4>
+        <ol class="steps">
+          <li>
+            <strong>z = ρcosφ ni qo'yamiz:</strong>
+            <div class="formula" style="margin-top: 8px">
+              <div class="math" style="font-size: 13px">
+                ∭_E z dV = ∫₀^{2π} ∫₀^{π/4} ∫₀^2 (ρcosφ)·ρ² sinφ dρ dφ dθ
+              </div>
+            </div>
+          </li>
+          <li>
+            <strong>ρ bo'yicha:</strong> ∫₀^2 ρ³ dρ = [ρ⁴/4]₀^2 =
+            <span class="hl-blue">4</span>
+          </li>
+          <li>
+            <strong>φ bo'yicha:</strong> ∫₀^{π/4} sinφ cosφ dφ =
+            [sin²φ/2]₀^{π/4} = <span class="hl-blue">1/4</span>
+          </li>
+          <li><strong>θ bo'yicha:</strong> 2π</li>
+          <li>
+            <strong
+              >∭z dV = 4 · 1/4 · 2π = <span class="hl-green">2π</span></strong
+            >
+          </li>
+          <li>
+            <strong>Sentroid:</strong>
+            <div class="formula" style="margin-top: 8px">
+              <div class="math">
+                z̄ = ∭z dV / V = 2π / [8π(2−√2)/3]<br />
+                = 3 / [4(2−√2)]<br />
+                = 3(2+√2) / 8 ≈ <span style="color: var(--accent3)">1.28</span>
+              </div>
+            </div>
+            Geometrik ma'no: qattiq jismning og'irlik markazi z=1.28 da
+            joylashgan. Konus pastki qismni "kesib" olgani uchun massa
+            yuqoriroqda to'plangan.
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ==================== 4 BUYUK TEOREMALAR ==================== -->
+    <section class="section" id="theorems">
+      <div class="section-header">
+        <div>
+          <div class="section-num">04 / Teoremalar</div>
+          <h2 class="section-title">To'rtta Buyuk <span>Teorema</span></h2>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-label hl-blue">Asosiy g'oya</div>
+        <h3>Hammasi bir tamoyildan</h3>
+        <p>
+          Bu to'rtta teorema bir g'oyaning turli o'lchamli ko'rinishi:
+          <strong>"Chegaradagi integral = ichki hududdagi integral"</strong>.
+          Har bir teorema bir o'lcham "yuqori" ko'taradi.
+        </p>
+      </div>
+
+      <div class="theorem-grid reveal">
+        <!-- 1: FT for Line Integrals -->
+        <div class="theorem-card t1">
+          <div class="tc-num">Teorema 01</div>
+          <h4>FT for Line Integrals</h4>
+          <div class="tc-formula">∫_C ∇f · dr<br />= f(r(b)) − f(r(a))</div>
+          <p>
+            Konservativ maydonda integral faqat bosh va oxirgi nuqtaga bog'liq.
+            Yo'l muhim emas.
+          </p>
+          <p style="margin-top: 8px; color: var(--accent1); font-size: 12px">
+            Nuqta → Nuqta
+          </p>
+        </div>
+
+        <!-- 2: Green's -->
+        <div class="theorem-card t2">
+          <div class="tc-num">Teorema 02</div>
+          <h4>Green's Theorem</h4>
+          <div class="tc-formula">
+            ∮_C P dx + Q dy<br />= ∬_D (∂Q/∂x − ∂P/∂y) dA
+          </div>
+          <p>
+            Yopiq egri chiziq bo'yicha integral — uni o'rab turgan D hudud
+            bo'yicha integralga aylanadi.
+          </p>
+          <p style="margin-top: 8px; color: var(--accent3); font-size: 12px">
+            Egri chiziq → Yuza (2D)
+          </p>
+        </div>
+
+        <!-- 3: Stokes' -->
+        <div class="theorem-card t3">
+          <div class="tc-num">Teorema 03</div>
+          <h4>Stokes' Theorem</h4>
+          <div class="tc-formula">∮_C F · dr<br />= ∬_S (curl F) · dS</div>
+          <p>
+            Green teoremaning 3D umumlashmasi. C chegarasi S yuzaning chegarasi.
+          </p>
+          <p style="margin-top: 8px; color: var(--accent4); font-size: 12px">
+            Egri chiziq → Yuza (3D)
+          </p>
+        </div>
+
+        <!-- 4: Divergence -->
+        <div class="theorem-card t4">
+          <div class="tc-num">Teorema 04</div>
+          <h4>Divergence Theorem</h4>
+          <div class="tc-formula">∯_S F · dS<br />= ∭_E div F dV</div>
+          <p>
+            Yopiq yuza orqali oqim — ichidagi hududdagi divergensiyaga teng.
+          </p>
+          <p style="margin-top: 8px; color: var(--accent2); font-size: 12px">
+            Yuza → Hajm
+          </p>
+        </div>
+
+        <!-- 5: Identities -->
+        <div class="theorem-card t5" style="grid-column: 1/-1">
+          <div class="tc-num">Muhim identikliklar</div>
+          <h4>Doim to'g'ri bo'lgan formulalar</h4>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+              gap: 12px;
+              margin-top: 12px;
+            "
+          >
+            <div class="tc-formula">
+              div(curl F) = 0<br /><span
+                style="color: rgba(255, 255, 255, 0.4); font-size: 11px"
+                >har qanday F uchun</span
+              >
+            </div>
+            <div class="tc-formula">
+              curl(∇f) = 0<br /><span
+                style="color: rgba(255, 255, 255, 0.4); font-size: 11px"
+                >har qanday f uchun</span
+              >
+            </div>
+            <div class="tc-formula">
+              ∮_C F·dr = 0<br /><span
+                style="color: rgba(255, 255, 255, 0.4); font-size: 11px"
+                >F konservativ bo'lsa</span
+              >
+            </div>
+            <div class="tc-formula">
+              ∂P/∂y = ∂Q/∂x<br /><span
+                style="color: rgba(255, 255, 255, 0.4); font-size: 11px"
+                >2D konservativ sharti</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SVG: Teoremalar uyg'unligi diagrammasi -->
+      <div class="diagram-wrap reveal" style="margin-top: 32px">
+        <svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker
+              id="arr4"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto-start-reverse"
+            >
+              <path
+                d="M2 1L8 5L2 9"
+                fill="none"
+                stroke="context-stroke"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </marker>
+          </defs>
+          <!-- Nodes -->
+          <g>
+            <!-- 0D: Points -->
+            <rect
+              x="30"
+              y="65"
+              width="100"
+              height="50"
+              rx="10"
+              fill="rgba(79,158,255,0.12)"
+              stroke="#4f9eff"
+              stroke-width="1"
+            />
+            <text
+              x="80"
+              y="87"
+              text-anchor="middle"
+              fill="#4f9eff"
+              font-family="JetBrains Mono"
+              font-size="11"
+            >
+              0D
+            </text>
+            <text
+              x="80"
+              y="103"
+              text-anchor="middle"
+              fill="rgba(255,255,255,0.6)"
+              font-family="JetBrains Mono"
+              font-size="10"
+            >
+              Nuqtalar
+            </text>
+
+            <!-- 1D: Curve -->
+            <rect
+              x="186"
+              y="65"
+              width="100"
+              height="50"
+              rx="10"
+              fill="rgba(99,226,178,0.1)"
+              stroke="#63e2b2"
+              stroke-width="1"
+            />
+            <text
+              x="236"
+              y="87"
+              text-anchor="middle"
+              fill="#63e2b2"
+              font-family="JetBrains Mono"
+              font-size="11"
+            >
+              1D
+            </text>
+            <text
+              x="236"
+              y="103"
+              text-anchor="middle"
+              fill="rgba(255,255,255,0.6)"
+              font-family="JetBrains Mono"
+              font-size="10"
+            >
+              Egri chiziq
+            </text>
+
+            <!-- 2D: Surface -->
+            <rect
+              x="342"
+              y="65"
+              width="100"
+              height="50"
+              rx="10"
+              fill="rgba(249,199,79,0.1)"
+              stroke="#f9c74f"
+              stroke-width="1"
+            />
+            <text
+              x="392"
+              y="87"
+              text-anchor="middle"
+              fill="#f9c74f"
+              font-family="JetBrains Mono"
+              font-size="11"
+            >
+              2D
+            </text>
+            <text
+              x="392"
+              y="103"
+              text-anchor="middle"
+              fill="rgba(255,255,255,0.6)"
+              font-family="JetBrains Mono"
+              font-size="10"
+            >
+              Yuza
+            </text>
+
+            <!-- 3D: Volume -->
+            <rect
+              x="498"
+              y="65"
+              width="100"
+              height="50"
+              rx="10"
+              fill="rgba(255,107,107,0.1)"
+              stroke="#ff6b6b"
+              stroke-width="1"
+            />
+            <text
+              x="548"
+              y="87"
+              text-anchor="middle"
+              fill="#ff6b6b"
+              font-family="JetBrains Mono"
+              font-size="11"
+            >
+              3D
+            </text>
+            <text
+              x="548"
+              y="103"
+              text-anchor="middle"
+              fill="rgba(255,255,255,0.6)"
+              font-family="JetBrains Mono"
+              font-size="10"
+            >
+              Hajm
+            </text>
+          </g>
+
+          <!-- Arrows -->
+          <line
+            x1="130"
+            y1="90"
+            x2="184"
+            y2="90"
+            stroke="#4f9eff"
+            stroke-width="1.5"
+            marker-end="url(#arr4)"
+          />
+          <line
+            x1="286"
+            y1="90"
+            x2="340"
+            y2="90"
+            stroke="#63e2b2"
+            stroke-width="1.5"
+            marker-end="url(#arr4)"
+          />
+          <line
+            x1="442"
+            y1="90"
+            x2="496"
+            y2="90"
+            stroke="#f9c74f"
+            stroke-width="1.5"
+            marker-end="url(#arr4)"
+          />
+
+          <!-- Theorem labels above arrows -->
+          <text
+            x="157"
+            y="80"
+            text-anchor="middle"
+            fill="rgba(255,255,255,0.5)"
+            font-family="JetBrains Mono"
+            font-size="9"
+          >
+            FT Line Int.
+          </text>
+          <text
+            x="313"
+            y="80"
+            text-anchor="middle"
+            fill="rgba(255,255,255,0.5)"
+            font-family="JetBrains Mono"
+            font-size="9"
+          >
+            Green / Stokes
+          </text>
+          <text
+            x="469"
+            y="80"
+            text-anchor="middle"
+            fill="rgba(255,255,255,0.5)"
+            font-family="JetBrains Mono"
+            font-size="9"
+          >
+            Divergence
+          </text>
+
+          <!-- Main label -->
+          <text
+            x="350"
+            y="30"
+            text-anchor="middle"
+            fill="rgba(255,255,255,0.3)"
+            font-family="Playfair Display"
+            font-size="14"
+            font-style="italic"
+          >
+            chegaradagi integral = ichki hududdagi integral
+          </text>
+          <text
+            x="350"
+            y="158"
+            text-anchor="middle"
+            fill="rgba(255,255,255,0.2)"
+            font-family="JetBrains Mono"
+            font-size="10"
+          >
+            har bir teorema bir o'lcham yuqori ko'taradi
+          </text>
+        </svg>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ==================== QUIZ ==================== -->
+    <section class="section" id="quiz">
+      <div class="section-header">
+        <div>
+          <div class="section-num">05 / Test</div>
+          <h2 class="section-title">O'z-o'zini <span>Tekshirish</span></h2>
+        </div>
+      </div>
+
+      <div class="quiz-wrap reveal">
+        <!-- Q1 -->
+        <div class="quiz-q">
+          <div class="q-text">
+            1. Fubini teoremasi qaysi tenglikni bildiradi?
+          </div>
+          <div class="quiz-options">
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'A')"
+              data-key="A"
+            >
+              <span class="opt-key">A</span> Qo'sh integral ikkita oddiy
+              integralning ko'paytmasiga teng
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, true, 'B')"
+              data-key="B"
+            >
+              <span class="opt-key">B</span> ∬_R f dA = ∫_a^b ∫_c^d f dy dx =
+              ∫_c^d ∫_a^b f dx dy
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'C')"
+              data-key="C"
+            >
+              <span class="opt-key">C</span> Qo'sh integral faqat f≥0 bo'lganda
+              mavjud
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'D')"
+              data-key="D"
+            >
+              <span class="opt-key">D</span> Ichki integral doim y bo'yicha
+              hisoblangishi kerak
+            </div>
+          </div>
+          <div class="quiz-explain" id="exp-q1">
+            ✓ <strong>To'g'ri.</strong> Fubini teoremasi: uzluksiz f uchun ikki
+            yo'nalishdagi takrorlangan integral teng va ikkala tartibda ham
+            hisoblanishi mumkin.
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="quiz-q">
+          <div class="q-text">
+            2. Polar koordinatada dA = dx dy ning o'rniga nima yoziladi?
+          </div>
+          <div class="quiz-options">
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'A')"
+              data-key="A"
+            >
+              <span class="opt-key">A</span> dr dθ
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, true, 'B')"
+              data-key="B"
+            >
+              <span class="opt-key">B</span> r dr dθ
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'C')"
+              data-key="C"
+            >
+              <span class="opt-key">C</span> r² dr dθ
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'D')"
+              data-key="D"
+            >
+              <span class="opt-key">D</span> sin θ dr dθ
+            </div>
+          </div>
+          <div class="quiz-explain" id="exp-q2">
+            ✓ <strong>To'g'ri.</strong> Yakobiani r, shuning uchun dA = r dr dθ.
+            Bu "r" ni unutmaslik juda muhim — polar koordinatada eng ko'p
+            kechadigan xato.
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="quiz-q">
+          <div class="q-text">
+            3. F konservativ bo'lsa, yopiq C egri chiziq uchun ∮_C F·dr = ?
+          </div>
+          <div class="quiz-options">
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'A')"
+              data-key="A"
+            >
+              <span class="opt-key">A</span> 1
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'B')"
+              data-key="B"
+            >
+              <span class="opt-key">B</span> ∞
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, true, 'C')"
+              data-key="C"
+            >
+              <span class="opt-key">C</span> 0
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'D')"
+              data-key="D"
+            >
+              <span class="opt-key">D</span> yo'lga bog'liq
+            </div>
+          </div>
+          <div class="quiz-explain" id="exp-q3">
+            ✓ <strong>To'g'ri.</strong> F = ∇f bo'lsa, FT Line Integrals
+            bo'yicha ∫_C F·dr = f(B)−f(A). Yopiq yo'l uchun A=B, shuning uchun
+            f(B)−f(A)=0.
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="quiz-q">
+          <div class="q-text">
+            4. Sferik koordinatada dV ning formulasi qaysi?
+          </div>
+          <div class="quiz-options">
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'A')"
+              data-key="A"
+            >
+              <span class="opt-key">A</span> ρ dρ dφ dθ
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'B')"
+              data-key="B"
+            >
+              <span class="opt-key">B</span> ρ² dρ dφ dθ
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, true, 'C')"
+              data-key="C"
+            >
+              <span class="opt-key">C</span> ρ² sinφ dρ dφ dθ
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'D')"
+              data-key="D"
+            >
+              <span class="opt-key">D</span> ρ² cosφ dρ dφ dθ
+            </div>
+          </div>
+          <div class="quiz-explain" id="exp-q4">
+            ✓ <strong>To'g'ri.</strong> Sferik koordinata Yakobiani ρ²sinφ. sinφ
+            ni unutmaslik kerak — bu φ = 0 va φ = π uchun nolga teng (qutb
+            yo'nalishlarida kompressiya).
+          </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="quiz-q">
+          <div class="q-text">5. div(curl F) = ?</div>
+          <div class="quiz-options">
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'A')"
+              data-key="A"
+            >
+              <span class="opt-key">A</span> ∇²F (vektorial Laplas)
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'B')"
+              data-key="B"
+            >
+              <span class="opt-key">B</span> curl(div F)
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, true, 'C')"
+              data-key="C"
+            >
+              <span class="opt-key">C</span> 0 (har qanday ikkinchi tartib
+              uzluksiz F uchun)
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'D')"
+              data-key="D"
+            >
+              <span class="opt-key">D</span> F konservativ bo'lsa 1, aks holda 0
+            </div>
+          </div>
+          <div class="quiz-explain" id="exp-q5">
+            ✓ <strong>To'g'ri.</strong> Bu vektorial analizning muhim
+            identikliklaridan biri: div(curl F) ≡ 0. Gidrodinamikada:
+            "rotatsional oqimning divergensiyasi nol" degani.
+          </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="quiz-q">
+          <div class="q-text">6. F = ⟨y, x⟩ maydon konservativmi?</div>
+          <div class="quiz-options">
+            <div
+              class="quiz-opt"
+              onclick="answer(this, true, 'A')"
+              data-key="A"
+            >
+              <span class="opt-key">A</span> Ha, chunki ∂P/∂y = ∂Q/∂x
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'B')"
+              data-key="B"
+            >
+              <span class="opt-key">B</span> Yo'q, chunki curl F ≠ 0
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'C')"
+              data-key="C"
+            >
+              <span class="opt-key">C</span> Yo'q, chunki div F ≠ 0
+            </div>
+            <div
+              class="quiz-opt"
+              onclick="answer(this, false, 'D')"
+              data-key="D"
+            >
+              <span class="opt-key">D</span> Aniqlab bo'lmaydi
+            </div>
+          </div>
+          <div class="quiz-explain" id="exp-q6">
+            ✓ <strong>To'g'ri.</strong> P=y, Q=x → ∂P/∂y = 1, ∂Q/∂x = 1. Teng,
+            demak konservativ. Potensial funksiya: f(x,y) = xy (chunki ∂(xy)/∂x
+            = y = P va ∂(xy)/∂y = x = Q).
+          </div>
+        </div>
+      </div>
+
+      <!-- Score -->
+      <div
+        id="score-box"
+        style="
+          display: none;
+          background: var(--bg2);
+          border: 1px solid var(--border);
+          border-radius: 14px;
+          padding: 24px;
+          margin-top: 20px;
+          text-align: center;
+        "
+      >
+        <div
+          style="
+            font-family: &quot;JetBrains Mono&quot;, monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            margin-bottom: 8px;
+          "
+        >
+          Natijangiz
+        </div>
+        <div
+          id="score-val"
+          style="
+            font-family: &quot;Playfair Display&quot;, serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent3);
+          "
+        ></div>
+        <div
+          id="score-msg"
+          style="color: var(--muted); font-size: 14px; margin-top: 8px"
+        ></div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>
+        Stewart Calculus 7th Ed · Ch.15–16 · Multiple Integrals & Vector
+        Calculus
+      </p>
+      <p
+        style="
+          margin-top: 6px;
+          font-family: &quot;JetBrains Mono&quot;, monospace;
+          font-size: 11px;
+          color: var(--muted);
+          opacity: 0.5;
+        "
+      >
+        Line · Surface · Triple · Green · Stokes · Divergence
+      </p>
+    </footer>
+
+    <script>
+      // Progress bar
+      window.addEventListener("scroll", () => {
+        const el = document.getElementById("progress");
+        const total =
+          document.documentElement.scrollHeight - window.innerHeight;
+        el.style.width = (window.scrollY / total) * 100 + "%";
+      });
+
+      // Reveal on scroll
+      const reveals = document.querySelectorAll(".reveal");
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e, i) => {
+            if (e.isIntersecting) {
+              setTimeout(() => e.target.classList.add("visible"), i * 80);
+              obs.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.1 },
+      );
+      reveals.forEach((r) => obs.observe(r));
+
+      // Nav dots active state
+      const sections = [
+        "hero",
+        "line",
+        "surface",
+        "triple",
+        "theorems",
+        "quiz",
+      ];
+      const dots = document.querySelectorAll(".nav-dot");
+      const secObs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              const idx = sections.indexOf(e.target.id);
+              dots.forEach((d, i) => d.classList.toggle("active", i === idx));
+            }
+          });
+        },
+        { threshold: 0.4 },
+      );
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) secObs.observe(el);
+      });
+
+      // Quiz
+      let answered = 0;
+      let correct = 0;
+      const total = 6;
+
+      function answer(el, isCorrect, key) {
+        const q = el.closest(".quiz-q");
+        if (q.dataset.done) return;
+        q.dataset.done = "1";
+        answered++;
+
+        const all = q.querySelectorAll(".quiz-opt");
+        all.forEach((o) => {
+          o.style.pointerEvents = "none";
+          if (o.dataset.key === key) {
+            o.classList.add(isCorrect ? "correct" : "wrong");
+          }
+          if (!isCorrect) {
+            const expId =
+              "exp-" +
+              q
+                .closest(".quiz-q")
+                .querySelector('.quiz-opt[onclick*="true"]')
+                ?.closest(".quiz-q")
+                ?.querySelector(".quiz-explain")?.id;
+            // Mark correct option green
+            all.forEach((oo) => {
+              if (oo.getAttribute("onclick")?.includes("true"))
+                oo.classList.add("correct");
+            });
+          }
+        });
+
+        const num =
+          Array.from(document.querySelectorAll(".quiz-q")).indexOf(q) + 1;
+        const exp = document.getElementById("exp-q" + num);
+        if (exp) exp.classList.add("show");
+
+        if (isCorrect) correct++;
+
+        if (answered === total) {
+          const box = document.getElementById("score-box");
+          const val = document.getElementById("score-val");
+          const msg = document.getElementById("score-msg");
+          box.style.display = "block";
+          val.textContent = correct + "/" + total;
+          val.style.color =
+            correct >= 5
+              ? "var(--accent3)"
+              : correct >= 3
+                ? "var(--accent4)"
+                : "var(--accent2)";
+          const msgs = [
+            "Yana o'qing, hali ko'p ish bor 💪', 'Yaxshi boshlanish! Davom eting 📖', 'Deyarli mukammal! 🎯', 'A\'lo! Hammasi boshingizda! 🏆",
+          ];
+          msg.textContent =
+            msgs[Math.min(Math.floor((correct / total) * 4), 3)];
+          box.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+    </script>
+  </body>
+</html>
